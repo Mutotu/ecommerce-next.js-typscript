@@ -1,21 +1,19 @@
-import { useEffect } from "react";
-import play from "../playground";
+import type { InferGetStaticPropsType } from "next";
+import getALlProducts from "../framework/shopify/products/get-all-products";
 
-//differecen between ts and tsx extensions=>
-// .ts is for pure TypeScrictpt files
-//.tsx for files containing JSX
+export async function getStaticProps() {
+  const products = await getALlProducts();
 
-export default function Home() {
-  // const message: string = "Hello";
-  // let a: AddEventListenerOptions;
-  // let b: NodeJS.Process;
-  // let person: Person = {
-  //   name: "LOl",
-  // };
+  return {
+    props: {
+      products,
+    },
+    revalidate: 4 * 60 * 60,
+  };
+}
 
-  useEffect(() => {
-    play();
-  }, []);
-
-  return <div>LOL </div>;
+export default function Home({
+  products,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  return <div>{JSON.stringify(products)}</div>;
 }
